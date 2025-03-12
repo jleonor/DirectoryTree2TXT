@@ -105,10 +105,10 @@ Contributions are welcome! If you have suggestions, bug fixes, or improvements, 
 
 ## License
 
-Distributed under the GNU GENERAL PUBLIC License. See the [LICENSE](LICENSE) file for more information.
+Distributed under the GNU GENERAL PUBLIC License. See the [LICENSE](LICENSE.txt) file for more information.
 
 ---
 
 ## Contact
 
-For questions, suggestions, or feedback, please open an issue on GitHub or contact the project maintainer at [your.email@example.com](mailto:jonathanleonor@gmail.com).
+For questions, suggestions, or feedback, please open an issue on GitHub or contact the project maintainer at [jonathanleonor@gmail.com](mailto:jonathanleonor@gmail.com).
