@@ -1,6 +1,6 @@
 # Directory Tree Viewer
 
-Directory Tree Viewer is a WPF application that generates a textual representation of your directory structure. With its intuitive interface and powerful features, you can easily browse, filter, and save the output of your directory trees.
+Directory Tree Viewer is a WPF application that generates a textual representation of your directory structure.
 
 ---
 
