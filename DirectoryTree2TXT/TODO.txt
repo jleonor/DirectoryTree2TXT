@@ -15,8 +15,16 @@ DONE:
 - ignore and hide are ticked by default when an entry is added
 - entries with wildcards "*" should be accepted
 - for example, if "*.bat" would mean that we either hide or ignore all .bat files
+- remove white border around the exclusion table
+- redesign remove button
+- change ignore and hide checkboxes to radio buttons
+- Add spacers between headers and center cell contents
+- Disable resizing and reordering of columns
+- hide table header and table title 
 
 REMAINING:
+
+
 - upon loading, the configuration panel should be closed
 - if no config is selected (which it should be by default), i want to have a big circle + button instead in the lower half of the config panel
 - the + button will show the layout if that makes sense so that a new configuration can be created

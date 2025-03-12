@@ -51,7 +51,7 @@
         <Grid x:Name="MainContentGrid" Grid.Row="1" Margin="10">
             <Grid.ColumnDefinitions>
                 <!-- LEFT: Configuration Panel pinned at 300px -->
-                <ColumnDefinition Width="300" />
+                <ColumnDefinition Width="400" />
                 <!-- MIDDLE: Toggle Button (auto) -->
                 <ColumnDefinition Width="Auto" />
                 <!-- RIGHT: Directory Tree area (expands) -->
@@ -132,7 +132,7 @@
                         <!-- Entry Controls Row -->
                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0" Grid.Row="0">
                             <TextBox x:Name="EntryNameTextBox"
-                       Width="150"
+                       Width="200px"
                        Text="{Binding NewEntryName, UpdateSourceTrigger=PropertyChanged}"
                        mah:TextBoxHelper.Watermark="Enter file or folder name"/>
                             <Button x:Name="AddEntryButton"
@@ -155,6 +155,15 @@
 
                         <!-- Exclusion Entries DataGrid -->
                         <Grid Grid.Row="2" Margin="0,10,0,0">
+                            <Grid.Style>
+                                <Style TargetType="Grid">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ExclusionEntries.Count}" Value="0">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Style>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
@@ -163,24 +172,156 @@
                             <DataGrid x:Name="ExclusionEntriesDataGrid"
           ItemsSource="{Binding ExclusionEntries}"
           AutoGenerateColumns="False"
-          CanUserAddRows="False"
           HeadersVisibility="Column"
-          Grid.Row="1">
+          BorderThickness="0"
+          BorderBrush="Transparent"
+          Grid.Row="1"
+          CanUserResizeColumns="False"
+          CanUserReorderColumns="False"
+          CanUserAddRows="False"
+          GridLinesVisibility="None">
+
+                                <!-- Custom header style: use AccentBrush background, increase height and center header text -->
+                                <DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+                                        <Setter Property="Foreground" Value="White" />
+                                        <Setter Property="Height" Value="40"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
+
+                                <DataGrid.Resources>
+                                    <!-- Cell style: remove borders, add padding and center content -->
+                                    <Style TargetType="DataGridCell">
+                                        <Setter Property="BorderThickness" Value="0" />
+                                        <Setter Property="Padding" Value="5" />
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                                    </Style>
+                                    <!-- Global style for radio buttons to allow toggle off -->
+                                    <Style TargetType="RadioButton">
+                                        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="RadioButton_PreviewMouseLeftButtonDown"/>
+                                    </Style>
+                                </DataGrid.Resources>
+
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Entry" Binding="{Binding Name}" Width="*"/>
-                                    <DataGridCheckBoxColumn Header="Ignore" Binding="{Binding Ignore}" Width="Auto"/>
-                                    <DataGridCheckBoxColumn Header="Hide" Binding="{Binding Hide}" Width="Auto"/>
+                                    <!-- Spacer Column -->
+                                    <DataGridTemplateColumn Width="5" IsReadOnly="True">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Rectangle Fill="Transparent"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <!-- Entry Name Column -->
+                                    <!-- Entry Name Column with ElementStyle to center text vertically -->
+                                    <DataGridTextColumn Header="Entry"
+                    Binding="{Binding Name}"
+                    Width="*">
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                                <Setter Property="HorizontalAlignment" Value="Left"/>
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+
+
+                                    <!-- Spacer Column -->
+                                    <DataGridTemplateColumn Width="5" IsReadOnly="True">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Rectangle Fill="Transparent"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <!-- Ignore Column: Radio Button -->
+                                    <DataGridTemplateColumn Header="Ignore" Width="Auto">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <RadioButton Margin="5,0"
+                                 IsChecked="{Binding Ignore, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 VerticalAlignment="Center"
+                                 HorizontalAlignment="Center" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <!-- Spacer Column -->
+                                    <DataGridTemplateColumn Width="5" IsReadOnly="True">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Rectangle Fill="Transparent"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <!-- Hide Column: Radio Button (when checked, sets Ignore as well) -->
+                                    <DataGridTemplateColumn Header="Hide" Width="Auto">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <RadioButton Margin="5,0"
+                                 IsChecked="{Binding Hide, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 VerticalAlignment="Center"
+                                 HorizontalAlignment="Center"
+                                 Checked="HideRadioButton_Checked" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <!-- Spacer Column -->
+                                    <DataGridTemplateColumn Width="5" IsReadOnly="True">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Rectangle Fill="Transparent"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <!-- Remove Column: Accent-Coloured X -->
                                     <DataGridTemplateColumn Header="Remove" Width="Auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Button Content="X"
-                            Command="{Binding DataContext.RemoveEntryCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                            CommandParameter="{Binding}" />
+                                                <Button Command="{Binding DataContext.RemoveEntryCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                            CommandParameter="{Binding}"
+                            Width="24" Height="24"
+                            Margin="5,5"
+                            Background="{StaticResource AccentBrush}"
+                            BorderThickness="0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                                                    <Button.Template>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border Background="{TemplateBinding Background}" CornerRadius="12">
+                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Button.Template>
+                                                    <TextBlock Text="X" 
+                                   Foreground="White" 
+                                   FontWeight="Bold" 
+                                   HorizontalAlignment="Center" 
+                                   VerticalAlignment="Center"/>
+                                                </Button>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <!-- Spacer Column -->
+                                    <DataGridTemplateColumn Width="5" IsReadOnly="True">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Rectangle Fill="Transparent"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
                                 </DataGrid.Columns>
                             </DataGrid>
+
 
                         </Grid>
                     </Grid>

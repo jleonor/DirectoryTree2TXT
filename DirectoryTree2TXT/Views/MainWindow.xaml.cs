@@ -124,6 +124,24 @@ namespace DirectoryTreeViewer.Views
             }
         }
 
+        private void RadioButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is RadioButton radioButton && radioButton.IsChecked == true)
+            {
+                // Toggle off if already checked.
+                radioButton.IsChecked = false;
+                e.Handled = true;
+            }
+        }
+
+        private void HideRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if (sender is RadioButton rb && rb.DataContext is DirectoryTreeViewer.Models.ExclusionEntry entry)
+            {
+                // When Hide is checked, also set Ignore to true.
+                entry.Ignore = true;
+            }
+        }
 
         private T? FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
         {
