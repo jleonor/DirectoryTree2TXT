@@ -21,10 +21,9 @@ DONE:
 - Add spacers between headers and center cell contents
 - Disable resizing and reordering of columns
 - hide table header and table title 
+- added icons to hovering on top bar buttons
 
 REMAINING:
-
-
 - upon loading, the configuration panel should be closed
 - if no config is selected (which it should be by default), i want to have a big circle + button instead in the lower half of the config panel
 - the + button will show the layout if that makes sense so that a new configuration can be created

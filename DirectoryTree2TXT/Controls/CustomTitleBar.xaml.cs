@@ -32,7 +32,7 @@ namespace DirectoryTreeViewer.Controls
                 {
                     // Restore to normal window state before dragging.
                     window.WindowState = WindowState.Normal;
-                    ToggleEllipse.Fill = new SolidColorBrush(Colors.Green);
+                    ToggleWindowButton.Tag = "□"; // update to the icon representing normal state
                 }
                 window.DragMove();
             }
@@ -55,15 +55,16 @@ namespace DirectoryTreeViewer.Controls
                 if (window.WindowState == WindowState.Maximized)
                 {
                     window.WindowState = WindowState.Normal;
-                    ToggleEllipse.Fill = new SolidColorBrush(Colors.Green); // Change to indicate "normal" mode
+                    ToggleWindowButton.Tag = "□"; // Icon indicating maximization is available
                 }
                 else
                 {
                     window.WindowState = WindowState.Maximized;
-                    ToggleEllipse.Fill = new SolidColorBrush(Colors.Orange); // Change to indicate "maximized" mode
+                    ToggleWindowButton.Tag = "❐"; // Icon indicating restore is available
                 }
             }
         }
+
 
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)

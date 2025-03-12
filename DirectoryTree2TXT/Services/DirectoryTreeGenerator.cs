@@ -18,7 +18,7 @@ namespace DirectoryTreeViewer.Services
         /// <param name="exclusions">Optional list of exclusions.</param>
         /// <param name="showContents">Flag to indicate whether file contents should be shown.</param>
         /// <returns>A string representing the directory tree.</returns>
-        public string GenerateTree(string rootPath, string indent = "", bool isLast = true, List<ExclusionEntry> exclusions = null, bool showContents = false)
+        public string GenerateTree(string rootPath, string indent = "", bool isLast = true, List<ExclusionEntry>? exclusions = null, bool showContents = false)
         {
             string tree = indent;
             if (!string.IsNullOrEmpty(indent))
