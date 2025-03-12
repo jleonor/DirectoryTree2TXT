@@ -1,0 +1,38 @@
+{
+  "DirectoryPath": "C:\\Users\\jonat\\OneDrive\\Desktop\\DevProjects\\WPF_Styles\\WPF_Styles",
+  "ExclusionEntries": [
+    {
+      "Name": "bin",
+      "Ignore": true
+    },
+    {
+      "Name": "obj",
+      "Ignore": true
+    },
+    {
+      "Name": "App.xaml",
+      "Ignore": true
+    },
+    {
+      "Name": "App.xaml.cs",
+      "Ignore": true
+    },
+    {
+      "Name": "AssemblyInfo.cs",
+      "Ignore": true
+    },
+    {
+      "Name": "WPF_Styles.csproj",
+      "Ignore": true
+    },
+    {
+      "Name": "WPF_Styles.csproj.user",
+      "Ignore": true
+    },
+    {
+      "Name": "sample.txt",
+      "Ignore": true
+    }
+  ],
+  "ShowContents": true
+}

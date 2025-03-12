@@ -1,0 +1,193 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ScrollBar Brushes (only include brushes needed for scrollbars) -->
+    <SolidColorBrush x:Key="NormalBrush" Color="#888" />
+    <SolidColorBrush x:Key="NormalBorderBrush" Color="#888" />
+    <SolidColorBrush x:Key="GlyphBrush" Color="#444" />
+    <SolidColorBrush x:Key="HorizontalNormalBrush" Color="#FF686868" />
+    <SolidColorBrush x:Key="HorizontalNormalBorderBrush" Color="#888" />
+    <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
+    <LinearGradientBrush x:Key="PressedBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#BBB" Offset="0.0"/>
+        <GradientStop Color="#EEE" Offset="0.1"/>
+        <GradientStop Color="#EEE" Offset="0.9"/>
+        <GradientStop Color="#FFF" Offset="1.0"/>
+    </LinearGradientBrush>
+
+    <!-- ScrollBar Button and Thumb Styles -->
+    <Style x:Key="ScrollBarLineButton" TargetType="{x:Type RepeatButton}">
+        <Setter Property="Visibility" Value="Collapsed"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="Focusable" Value="false"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                    <Border x:Name="Border" Margin="1" CornerRadius="2"
+                            Background="{StaticResource NormalBrush}"
+                            BorderBrush="{StaticResource NormalBorderBrush}"
+                            BorderThickness="1">
+                        <Path HorizontalAlignment="Center" VerticalAlignment="Center"
+                              Fill="{StaticResource GlyphBrush}"
+                              Data="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource PressedBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
+        <Setter Property="Visibility" Value="Collapsed"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="IsTabStop" Value="false"/>
+        <Setter Property="Focusable" Value="false"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                    <Border Background="Black" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ScrollBarThumb" TargetType="{x:Type Thumb}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="IsTabStop" Value="false"/>
+        <Setter Property="Focusable" Value="false"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <!-- This style is used for the vertical scrollbar -->
+                    <Border CornerRadius="4"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="0"
+                            Width="8" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Vertical and Horizontal ScrollBar Templates -->
+    <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
+        <Grid>
+            <Track Name="PART_Track" IsDirectionReversed="true">
+                <Track.DecreaseRepeatButton>
+                    <!-- Force height to zero so it doesnt consume space -->
+                    <RepeatButton Style="{StaticResource ScrollBarPageButton}" Command="ScrollBar.PageUpCommand" Height="0"/>
+                </Track.DecreaseRepeatButton>
+                <Track.Thumb>
+                    <Thumb Style="{StaticResource ScrollBarThumb}" Margin="1,0,1,0"
+                           Background="{StaticResource NormalBrush}"
+                           BorderBrush="{StaticResource NormalBorderBrush}" />
+                </Track.Thumb>
+                <Track.IncreaseRepeatButton>
+                    <RepeatButton Style="{StaticResource ScrollBarPageButton}" Command="ScrollBar.PageDownCommand" Height="0"/>
+                </Track.IncreaseRepeatButton>
+            </Track>
+        </Grid>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="HorizontalScrollBar" TargetType="{x:Type ScrollBar}">
+        <Grid>
+            <Track Name="PART_Track" IsDirectionReversed="False">
+                <Track.DecreaseRepeatButton>
+                    <!-- Collapse the left page button -->
+                    <RepeatButton Style="{StaticResource ScrollBarPageButton}"
+                                  Command="ScrollBar.PageLeftCommand" Visibility="Collapsed"/>
+                </Track.DecreaseRepeatButton>
+                <Track.Thumb>
+                    <!-- Inline thumb template without fixed width to allow full movement -->
+                    <Thumb Margin="1,0,1,0"
+                           Background="{StaticResource NormalBrush}"
+                           BorderBrush="{StaticResource NormalBorderBrush}">
+                        <Thumb.Template>
+                            <ControlTemplate TargetType="Thumb">
+                                <Border CornerRadius="4"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="0"
+                                        Height="8"/>
+                            </ControlTemplate>
+                        </Thumb.Template>
+                    </Thumb>
+                </Track.Thumb>
+                <Track.IncreaseRepeatButton>
+                    <!-- Collapse the right page button -->
+                    <RepeatButton Style="{StaticResource ScrollBarPageButton}"
+                                  Command="ScrollBar.PageRightCommand" Visibility="Collapsed"/>
+                </Track.IncreaseRepeatButton>
+            </Track>
+        </Grid>
+    </ControlTemplate>
+
+    <!-- Global ScrollBar Style -->
+    <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="Opacity" Value="1"/>
+        <Style.Triggers>
+            <Trigger Property="Orientation" Value="Horizontal">
+                <Setter Property="Width" Value="Auto"/>
+                <Setter Property="Height" Value="18" />
+                <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+            </Trigger>
+            <Trigger Property="Orientation" Value="Vertical">
+                <Setter Property="Width" Value="18"/>
+                <Setter Property="Height" Value="Auto" />
+                <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Custom ScrollViewer Style (using the above ScrollBar styles) -->
+    <Style x:Key="FavsScrollViewer" TargetType="{x:Type ScrollViewer}">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <!-- If targeting .NET 4 or later, you can enable touch/trackpad panning by adding:
+                             PanningMode="Both" -->
+                        <ScrollContentPresenter Grid.Column="0" Grid.Row="0"/>
+                        <ScrollBar Name="PART_VerticalScrollBar"
+                                   Grid.Column="1" Grid.Row="0"
+                                   Value="{TemplateBinding VerticalOffset}"
+                                   Maximum="{TemplateBinding ScrollableHeight}"
+                                   ViewportSize="{TemplateBinding ViewportHeight}"
+                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+                        <ScrollBar Name="PART_HorizontalScrollBar" Orientation="Horizontal"
+                                   Grid.Row="1" Grid.Column="0"
+                                   Value="{TemplateBinding HorizontalOffset}"
+                                   Maximum="{TemplateBinding ScrollableWidth}"
+                                   ViewportSize="{TemplateBinding ViewportWidth}"
+                                   Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
+                        <!-- Cover the corner where scrollbars intersect -->
+                        <Rectangle Grid.Row="1" Grid.Column="1" 
+           Fill="{Binding Background, RelativeSource={RelativeSource AncestorType=ScrollViewer}}"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

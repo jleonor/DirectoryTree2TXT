@@ -1,0 +1,44 @@
+DONE:
+- Remove .json from config names
+- Rename should allow for renaming directly in the list box
+- Restructure project for best practices and MVVM
+- Add another shade of light grey for box borders and the line separator inside the panel
+- fix spacing in main area so that the texts "Directory Tree" and "Select a folder" texts have the same spacing with their respective text boxes
+- make ios style scroll bar (in terms of looks, but if possible, also make it so that they only show during scrolling)
+- when the fill window button is clicked, it makes it fill the window and changes the icon (and vice versa)
+- adjust the look of the minimise, fill window/go in smaller window, and close button look (ios look with the colours and icons as well)
+- if in full window mode, if the nav bar is dragged, go to smaller window mode
+- ideally we can store this code in a separate file that can be added to any project, and all we have to specify is the application name
+
+REMAINING:
+- Add an option for "hide" alongside "ignore" in the exclusions table and adjust the config json accordingly
+- "ignore" overwrites the show content setting and doesn't show the contents for that file or folder
+- "hide" hides that file or folder from the directory tree
+
+- entries with wildcards "*" should be accepted
+- for example, if "*.bat" would mean that we either hide or ignore all .bat files
+
+- upon loading, the configuration panel should be closed
+- if no config is selected (which it should be by default), i want to have a big circle + button instead in the lower half of the config panel
+- the + button will show the layout if that makes sense so that a new configuration can be created
+- the save button should be moved to the bottom part of the config panel
+- in the top half of the config panel, we should add an "Edit" button, that loads the configuration into the lower half of the configuration panel
+- when this button was used to load the lower half of the configuration panel, the save button overwrites the file
+- when the + button was used to load the lower half of the configuration panel, the save button adds a random config file
+- In the configuration panel lower half, I want to also add a text box for naming the configuration (optional, if not filled, it will be randomized)
+- if there is no saved configuration, completely hide the top part of the configuration panel
+
+- make the top part of the configuration panel and the bottom part of the configuration panel vertically expandable/collapsible with headers like "Saved Configurations" and "Current Configuration"
+- Add animation for expanding, collapsing, and fading for + button interaction
+
+- add a copy to clipboard button for the directory tree (same height as the "Directory Tree" text, just all the way on the right)
+
+- Change the highlighting colour of file selection to white
+
+- Additional options compact -> smaller indentations
+- Pipes / No Pipes / Custom prefix for each file and folder only (not content)
+- Indent content with files (ignores pipes to connect if enabled) true or false
+- Move file contents to end of text
+
+- Add line counter and character counter below the directory tree
+- Add option to show line numbers

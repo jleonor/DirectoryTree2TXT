@@ -1,0 +1,12 @@
+<!-- Resources/Theme.xaml -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Dark Theme Brushes with Visual Studio Purple Accent -->
+	<SolidColorBrush x:Key="PrimaryBackgroundBrush" Color="#1E1E1E"/>
+	<SolidColorBrush x:Key="ControlBackgroundBrush" Color="#2D2D30"/>
+	<SolidColorBrush x:Key="PrimaryForegroundBrush" Color="White"/>
+	<SolidColorBrush x:Key="AccentBrush" Color="#5C2D91"/>
+	<SolidColorBrush x:Key="LightGreyBorderBrush" Color="#D3D3D3"/>
+
+</ResourceDictionary>
