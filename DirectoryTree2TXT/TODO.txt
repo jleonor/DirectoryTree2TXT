@@ -13,11 +13,10 @@ DONE:
 - "ignore" overwrites the show content setting and doesn't show the contents for that file or folder. The file or folder name does still appear in the tree.
 - "hide" hides that file or folder from the directory tree
 - ignore and hide are ticked by default when an entry is added
-
-REMAINING:
 - entries with wildcards "*" should be accepted
 - for example, if "*.bat" would mean that we either hide or ignore all .bat files
 
+REMAINING:
 - upon loading, the configuration panel should be closed
 - if no config is selected (which it should be by default), i want to have a big circle + button instead in the lower half of the config panel
 - the + button will show the layout if that makes sense so that a new configuration can be created
