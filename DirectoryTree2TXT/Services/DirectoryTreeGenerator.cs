@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace DirectoryTreeViewer.Services
 {
@@ -24,6 +25,7 @@ namespace DirectoryTreeViewer.Services
             {
                 tree += isLast ? "└── " : "├── ";
             }
+
             string currentName = "/" + Path.GetFileName(rootPath);
             tree += currentName + Environment.NewLine;
 
@@ -46,9 +48,9 @@ namespace DirectoryTreeViewer.Services
                 string newIndent = indent + (isLast ? "    " : "│   ");
                 string childName = Path.GetFileName(child.path);
 
-                // Check if the entry should be hidden or ignored.
-                bool isHidden = exclusions?.Any(e => e.Name.Equals(childName, StringComparison.OrdinalIgnoreCase) && e.Hide) == true;
-                bool isIgnored = exclusions?.Any(e => e.Name.Equals(childName, StringComparison.OrdinalIgnoreCase) && e.Ignore) == true;
+                // Check if the entry should be hidden or ignored using wildcard matching
+                bool isHidden = exclusions?.Any(e => MatchesExclusion(e.Name, childName) && e.Hide) == true;
+                bool isIgnored = exclusions?.Any(e => MatchesExclusion(e.Name, childName) && e.Ignore) == true;
 
                 // Skip the entry entirely if hidden.
                 if (isHidden)
@@ -60,7 +62,6 @@ namespace DirectoryTreeViewer.Services
                 {
                     if (isIgnored)
                     {
-                        // Show the folder name but do not process its children.
                         tree += newIndent + (childIsLast ? "└── " : "├── ") + childName + Environment.NewLine;
                     }
                     else
@@ -71,7 +72,7 @@ namespace DirectoryTreeViewer.Services
                 else
                 {
                     tree += newIndent + (childIsLast ? "└── " : "├── ") + childName + Environment.NewLine;
-                    // Only show file contents if overall "showContents" is enabled and the file is not ignored.
+
                     if (showContents && !isIgnored)
                     {
                         try
@@ -85,10 +86,6 @@ namespace DirectoryTreeViewer.Services
                             }
                             tree += contentIndent + "    --- End of " + childName + " ---" + Environment.NewLine;
                         }
-                        catch (UnauthorizedAccessException)
-                        {
-                            tree += newIndent + "    [Access Denied to " + childName + "]" + Environment.NewLine;
-                        }
                         catch (Exception ex)
                         {
                             tree += newIndent + "    [Error Reading " + childName + ": " + ex.Message + "]" + Environment.NewLine;
@@ -97,6 +94,22 @@ namespace DirectoryTreeViewer.Services
                 }
             }
             return tree;
+        }
+
+        private bool MatchesExclusion(string exclusionPattern, string fileName)
+        {
+            if (!exclusionPattern.Contains("*") && !exclusionPattern.Contains("?"))
+            {
+                return string.Equals(exclusionPattern, fileName, StringComparison.OrdinalIgnoreCase);
+            }
+
+            // Convert wildcard pattern to regex
+            string pattern = "^" + Regex.Escape(exclusionPattern)
+                                    .Replace("\\*", ".*")   // * -> match any number of characters
+                                    .Replace("\\?", ".")    // ? -> match any single character
+                                    + "$";
+
+            return Regex.IsMatch(fileName, pattern, RegexOptions.IgnoreCase);
         }
 
     }

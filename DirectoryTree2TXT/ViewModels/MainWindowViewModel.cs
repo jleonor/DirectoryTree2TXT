@@ -131,8 +131,13 @@ namespace DirectoryTreeViewer.ViewModels
         {
             if (!string.IsNullOrWhiteSpace(NewEntryName))
             {
-                // New entries default to both ignored and hidden.
-                ExclusionEntries.Add(new ExclusionEntry { Name = NewEntryName, Ignore = true, Hide = true });
+                ExclusionEntries.Add(new ExclusionEntry
+                {
+                    Name = NewEntryName,
+                    Ignore = true,
+                    Hide = true
+                });
+
                 NewEntryName = string.Empty;
             }
         }
