@@ -161,25 +161,27 @@
                             </Grid.RowDefinitions>
                             <Label Content="Exclusion Entries:" Grid.Row="0"/>
                             <DataGrid x:Name="ExclusionEntriesDataGrid"
-                        ItemsSource="{Binding ExclusionEntries}"
-                        AutoGenerateColumns="False"
-                        CanUserAddRows="False"
-                        HeadersVisibility="Column"
-                        Grid.Row="1">
+          ItemsSource="{Binding ExclusionEntries}"
+          AutoGenerateColumns="False"
+          CanUserAddRows="False"
+          HeadersVisibility="Column"
+          Grid.Row="1">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Entry" Binding="{Binding Name}" Width="*"/>
                                     <DataGridCheckBoxColumn Header="Ignore" Binding="{Binding Ignore}" Width="Auto"/>
+                                    <DataGridCheckBoxColumn Header="Hide" Binding="{Binding Hide}" Width="Auto"/>
                                     <DataGridTemplateColumn Header="Remove" Width="Auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Button Content="X"
-                                Command="{Binding DataContext.RemoveEntryCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                CommandParameter="{Binding}" />
+                            Command="{Binding DataContext.RemoveEntryCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                            CommandParameter="{Binding}" />
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
                                 </DataGrid.Columns>
                             </DataGrid>
+
                         </Grid>
                     </Grid>
                 </Grid>

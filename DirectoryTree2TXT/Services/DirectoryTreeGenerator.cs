@@ -24,12 +24,12 @@ namespace DirectoryTreeViewer.Services
             {
                 tree += isLast ? "└── " : "├── ";
             }
-            tree += "/" + Path.GetFileName(rootPath) + Environment.NewLine;
+            string currentName = "/" + Path.GetFileName(rootPath);
+            tree += currentName + Environment.NewLine;
 
             List<(bool isDirectory, string path)> children = new List<(bool, string)>();
             try
             {
-                // Add directories and files
                 children.AddRange(Directory.GetDirectories(rootPath).Select(d => (true, d)));
                 children.AddRange(Directory.GetFiles(rootPath).Select(f => (false, f)));
             }
@@ -44,48 +44,60 @@ namespace DirectoryTreeViewer.Services
                 bool childIsLast = (i == children.Count - 1);
                 var child = children[i];
                 string newIndent = indent + (isLast ? "    " : "│   ");
+                string childName = Path.GetFileName(child.path);
+
+                // Check if the entry should be hidden or ignored.
+                bool isHidden = exclusions?.Any(e => e.Name.Equals(childName, StringComparison.OrdinalIgnoreCase) && e.Hide) == true;
+                bool isIgnored = exclusions?.Any(e => e.Name.Equals(childName, StringComparison.OrdinalIgnoreCase) && e.Ignore) == true;
+
+                // Skip the entry entirely if hidden.
+                if (isHidden)
+                {
+                    continue;
+                }
 
                 if (child.isDirectory)
                 {
-                    string directoryName = Path.GetFileName(child.path);
-                    if (exclusions?.Any(e => e.Name.Equals(directoryName, StringComparison.OrdinalIgnoreCase) && e.Ignore) == true)
-                        continue;
-
-                    tree += GenerateTree(child.path, newIndent, childIsLast, exclusions, showContents);
+                    if (isIgnored)
+                    {
+                        // Show the folder name but do not process its children.
+                        tree += newIndent + (childIsLast ? "└── " : "├── ") + childName + Environment.NewLine;
+                    }
+                    else
+                    {
+                        tree += GenerateTree(child.path, newIndent, childIsLast, exclusions, showContents);
+                    }
                 }
                 else
                 {
-                    string fileName = Path.GetFileName(child.path);
-                    if (exclusions?.Any(e => e.Name.Equals(fileName, StringComparison.OrdinalIgnoreCase) && e.Ignore) == true)
-                        continue;
-
-                    tree += newIndent + (childIsLast ? "└── " : "├── ") + fileName + Environment.NewLine;
-
-                    if (showContents)
+                    tree += newIndent + (childIsLast ? "└── " : "├── ") + childName + Environment.NewLine;
+                    // Only show file contents if overall "showContents" is enabled and the file is not ignored.
+                    if (showContents && !isIgnored)
                     {
                         try
                         {
                             string fileContent = File.ReadAllText(child.path);
                             string contentIndent = newIndent + (childIsLast ? "    " : "│   ");
-                            tree += contentIndent + "    --- Start of " + fileName + " ---" + Environment.NewLine;
+                            tree += contentIndent + "    --- Start of " + childName + " ---" + Environment.NewLine;
                             foreach (var line in fileContent.Split(new[] { Environment.NewLine }, StringSplitOptions.None))
                             {
                                 tree += contentIndent + "    " + line + Environment.NewLine;
                             }
-                            tree += contentIndent + "    --- End of " + fileName + " ---" + Environment.NewLine;
+                            tree += contentIndent + "    --- End of " + childName + " ---" + Environment.NewLine;
                         }
                         catch (UnauthorizedAccessException)
                         {
-                            tree += newIndent + "    [Access Denied to " + fileName + "]" + Environment.NewLine;
+                            tree += newIndent + "    [Access Denied to " + childName + "]" + Environment.NewLine;
                         }
                         catch (Exception ex)
                         {
-                            tree += newIndent + "    [Error Reading " + fileName + ": " + ex.Message + "]" + Environment.NewLine;
+                            tree += newIndent + "    [Error Reading " + childName + ": " + ex.Message + "]" + Environment.NewLine;
                         }
                     }
                 }
             }
             return tree;
         }
+
     }
 }
