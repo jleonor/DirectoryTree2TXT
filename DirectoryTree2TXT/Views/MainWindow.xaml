@@ -146,13 +146,17 @@
                       Command="{Binding ClearEntriesCommand}"/>
                         </StackPanel>
 
-                        <!-- Checkbox Row -->
-                        <CheckBox x:Name="ShowContentsCheckBox"
-                      Content="Show File Contents"
-                      IsChecked="{Binding ShowContents}"
-                      Margin="0,10,0,0"
-                      Grid.Row="1"/>
-
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Grid.Row="1">
+                            <!-- Checkbox Row -->
+                            <CheckBox x:Name="ShowContentsCheckBox"
+                            Content="Show File Contents"
+                            IsChecked="{Binding ShowContents}"
+                            Margin="0,10,0,0"/>
+                            <CheckBox x:Name="ShowOnlyFolders"
+                            Content="Show Only Folders"
+                            IsChecked="{Binding ShowOnlyFolders}"
+                            Margin="10,10,0,0"/>
+                        </StackPanel>
                         <!-- Exclusion Entries DataGrid -->
                         <Grid Grid.Row="2" Margin="0,10,0,0">
                             <Grid.Style>

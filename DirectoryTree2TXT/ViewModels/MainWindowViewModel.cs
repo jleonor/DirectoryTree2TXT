@@ -15,6 +15,7 @@ namespace DirectoryTreeViewer.ViewModels
         private string _directoryPath = string.Empty;
         private string _treeOutput = string.Empty;
         private bool _showContents;
+        private bool _showOnlyFolders;
         private string _newEntryName = string.Empty;
         private ConfigurationFileViewModel? _selectedConfiguration; // Backing field added
 
@@ -37,6 +38,12 @@ namespace DirectoryTreeViewer.ViewModels
         {
             get => _showContents;
             set { _showContents = value; OnPropertyChanged(); }
+        }
+
+        public bool ShowOnlyFolders
+        {
+            get => _showOnlyFolders;
+            set { _showOnlyFolders = value; OnPropertyChanged(); }
         }
 
         public string NewEntryName
@@ -119,7 +126,7 @@ namespace DirectoryTreeViewer.ViewModels
             if (Directory.Exists(DirectoryPath))
             {
                 var exclusions = ExclusionEntries?.ToList() ?? new List<ExclusionEntry>(); // Fix null issue
-                TreeOutput = _directoryTreeGenerator.GenerateTree(DirectoryPath, "", true, exclusions, ShowContents);
+                TreeOutput = _directoryTreeGenerator.GenerateTree(DirectoryPath, "", true, exclusions, ShowContents, ShowOnlyFolders);
             }
             else
             {

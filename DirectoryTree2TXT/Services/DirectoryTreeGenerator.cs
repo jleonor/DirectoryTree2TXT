@@ -18,7 +18,7 @@ namespace DirectoryTreeViewer.Services
         /// <param name="exclusions">Optional list of exclusions.</param>
         /// <param name="showContents">Flag to indicate whether file contents should be shown.</param>
         /// <returns>A string representing the directory tree.</returns>
-        public string GenerateTree(string rootPath, string indent = "", bool isLast = true, List<ExclusionEntry>? exclusions = null, bool showContents = false)
+        public string GenerateTree(string rootPath, string indent = "", bool isLast = true, List<ExclusionEntry>? exclusions = null, bool showContents = false, bool showOnlyFolders = false)
         {
             string tree = indent;
             if (!string.IsNullOrEmpty(indent))
@@ -33,7 +33,8 @@ namespace DirectoryTreeViewer.Services
             try
             {
                 children.AddRange(Directory.GetDirectories(rootPath).Select(d => (true, d)));
-                children.AddRange(Directory.GetFiles(rootPath).Select(f => (false, f)));
+                if (!showOnlyFolders)
+                    children.AddRange(Directory.GetFiles(rootPath).Select(f => (false, f)));
             }
             catch (UnauthorizedAccessException)
             {
@@ -66,7 +67,7 @@ namespace DirectoryTreeViewer.Services
                     }
                     else
                     {
-                        tree += GenerateTree(child.path, newIndent, childIsLast, exclusions, showContents);
+                        tree += GenerateTree(child.path, newIndent, childIsLast, exclusions, showContents, showOnlyFolders);
                     }
                 }
                 else
